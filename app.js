@@ -1,3 +1,7 @@
+// nmp install nodemon express pdffiller
+// para que todo funcione bien instalé Herramientas de desarrollo de Escritorio de C++ con Visual Studio Installer
+// y PDFtk en https://www.pdflabs.com/tools/pdftk-server/
+// npm start para iniciar 
 const express = require('express');
 var pdfFiller = require('pdffiller');
 
@@ -6,14 +10,12 @@ const app = express()
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
-var sourcePDF = "test/Polizas_Turista 16jun_Mesa de trabajo 1.pdf";
+// nombre del pdf de entrada
+var sourcePDF = "test/Polizas_Turista 16jun_Mesa de trabajo 1.pdf"; 
+// nombre del pdf de salida
 var destinationPDF =  "test/poliza_completa.pdf";
-/*var data = {
-    "ID" : "1",
-    "Nombre" : "Ricardo",
-    "Apellido" : "Hernandez",
-};*/
- 
+
+// datos del formulario
 var data = {
     "NumPoliza" : "1",
     "NombreAsegurado" : "Ricardo",
@@ -54,7 +56,7 @@ var data = {
     "Initial" : "R"
 
 };
-
+// función de llenado de pdf
 pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) {
     if (err) throw err;
     console.log("In callback (we're done).");
