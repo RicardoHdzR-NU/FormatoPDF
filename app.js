@@ -55,7 +55,8 @@ var data = {
     "ApplicantLicense" : "Licencia",
     "Driver2License" : "N/A",
     "Eld/UndLicense" : "N/A",
-    "Initial" : "R"
+    "Initial" : "R",
+    //"QR" : "image/159962865_490286518757957_717485257556294162_n"
 
 };
 // función de llenado de pdf 
