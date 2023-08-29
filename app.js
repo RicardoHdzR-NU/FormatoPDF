@@ -21,7 +21,7 @@ var data = {
     "NombreAsegurado" : "Ricardo",
     "TelAsegurado" : "Hernandez",
     "CorreoAsegurado" : "rhernandez@nationalunity.com.mx",
-    "DireccionAsegurado" : "Miguel Angel #6420 Portal de CUmbres",
+    "DireccionAsegurado" : "Miguel Angel #6420 Portal de Cumbres",
     "Agente" : "Agente",
     "TelAgente" : "Un Numero",
     "CorreoAgente" : "Correo",
@@ -32,6 +32,8 @@ var data = {
     "MMTo" : "10",
     "DDTo" : "23",
     "YRTo" : "23",
+    "HR" : "05",
+    "AM/PM" : "PM",
     "AñoVeh" : "2012",
     "MarcaVeh" : "Chevrolet",
     "ModeloVeh" : "Sonic",
@@ -41,7 +43,7 @@ var data = {
     "Premium" : "Si",
     "RoadAssist" : "Si",
     "PolicyFee" : "Si",
-    "AssistPLus" : "Si",
+    "AssistPlus" : "Si",
     "Misc" : "N/A",
     "Total" : "$4,815,198",
     "Applicant" : "Ricardo Hernandez Rincon",
@@ -56,7 +58,7 @@ var data = {
     "Initial" : "R"
 
 };
-// función de llenado de pdf
+// función de llenado de pdf 
 pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) {
     if (err) throw err;
     console.log("In callback (we're done).");
