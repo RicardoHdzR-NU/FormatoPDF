@@ -16,8 +16,8 @@ async function fillPdfForm(input, image,  output) {
         // Cargamos el PDF
         const pdfDoc = await PDFDocument.load(input)
         // Cargamos la imagen (elegimos la que sea necesaria segun si es jpg o png)
-        const qrImage = await pdfDoc.embedJpg(image)
-        //const qrImage = await pdfDoc.embedPng(image)
+        //const qrImage = await pdfDoc.embedJpg(image)
+        const qrImage = await pdfDoc.embedPng(image)
 
         //Obtenemos la información del formulario
         const form = pdfDoc.getForm()
@@ -105,6 +105,8 @@ async function fillPdfForm(input, image,  output) {
         initialField.setText("R")
         qrImageField.setImage(qrImage)
 
+        form.flatten();
+
         //Regresamos el formulario lleno
         return pdfDoc;
 	} catch (err) {
@@ -126,7 +128,7 @@ async function saveFilledForm(pdfDoc, output) {
 async function main() {
     // Definimos la dirección del PDF, de la imagen y la dirección y nombre del archivo de salida
 	const input = "test/Polizas_Turista 16jun_Mesa de trabajo 1.pdf";
-    const image = "image/(nombre del archivo + .jpg o .png)"
+    const image = "image/Commons_QR_code.png"
 	const output = 'test/output.pdf';
 
     // COnvertimos el buffers al PDF e Imagen
