@@ -117,11 +117,6 @@ async function saveFilledForm(pdfDoc, output) {
 
 //Función principal
 module.exports = async function (parameterData) {
-    // Definimos la dirección del PDF, de la imagen y la dirección y nombre del archivo de salida
-	//const input = "test/Polizas_Turista 16jun_Mesa de trabajo 1.pdf";
-    //const image = "image/Commons_QR_code.png"
-	//const output = 'test/output.pdf';
-
     // Convertimos en buffers al PDF e Imagen
     const inputFile = fs.readFileSync(parameterData.input)
     const inputImage = fs.readFileSync(parameterData.image)
@@ -129,5 +124,3 @@ module.exports = async function (parameterData) {
 	const pdfDoc = await fillPdfForm(inputFile, inputImage, parameterData.fillData);
 	await saveFilledForm(pdfDoc, parameterData.output);
 }
-
-//main().catch((err) => console.error('Error:', err));
