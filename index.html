@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8" />
+    <title>POST DEMO</title>
+</head>
+ 
+<body>
+    <button>PDF</button>
+</body>
+
+<script>
+    
+    const paramData = {
+        input: "test/Polizas_Turista 16jun_Mesa de trabajo 1.pdf",
+        image: "image/Commons_QR_code.png",
+        output: "test/output.pdf",
+        fillData: {
+            numPoliza: "1",
+            nombreAsegurado: "Ricardo Hernandez",
+            telAsegurado: "8116610129",
+            correoAsegurado: "rhernandez@nationalunity.com.mx",
+            direccionAsegurado: "Miguel Angel #6420 Portal de Cumbres",
+            agente: "Agente",
+            telAgente: "Un Numero",
+            correoAgente: "Correo",
+            term: "T",
+            mMFrom: "08",
+            dDFrom: "23",
+            yRFrom: "23",
+            mMTo: "10",
+            dDTo: "23",
+            yRTo: "23",
+            hR: "05",
+            aMPM: "PM",
+            añoVeh: "2012",
+            marcaVeh: "Chevrolet",
+            modeloVeh: "Sonic",
+            vIN: "1518165100",
+            placaEstado: "TEK-412-A",
+            towed: "No",
+            premium: "Si",
+            roadAssist: "Si",
+            policyFee: "Si",
+            assistPlus: "Si",
+            misc: "N/A",
+            total: "$4,815,198",
+            applicant: "Ricardo Hernandez Rincon",
+            driver2: "N/A",
+            elderUnderage: "N/A",
+            applicantBirth: "23/10/01",
+            driver2Birth: "N/A",
+            eldUndBirth: "N/A",
+            applicantLicense: "Licencia",
+            driver2License: "N/A",
+            eldUndLicense: "N/A",
+            initial: "R"
+        },
+    }
+
+    document.querySelector('button')
+        .addEventListener('click', (e) => {      
+            fetch('/pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(paramData)
+            })
+                .then((res) => {
+                    console.log(res)
+                    
+                })
+        });
+</script>
