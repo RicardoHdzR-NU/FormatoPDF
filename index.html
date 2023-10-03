@@ -69,8 +69,11 @@
                 body: JSON.stringify(paramData)
             })
                 .then((res) => {
-                    console.log(res)
-                    
+                    return res.blob();
+                })
+                .then((blob) => {
+                    const blobData = URL.createObjectURL(blob);
+                    window.open(blobData, '_blank');
                 })
         });
 </script>
