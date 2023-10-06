@@ -1,79 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
- 
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <title>POST DEMO</title>
+    <title>Rellenar campos de formulario en PDF con JavaScript</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.js"></script>
 </head>
- 
 <body>
-    <button>PDF</button>
-</body>
+    <input type="text" id="nombre" placeholder="Nombre">
+    <input type="text" id="nPoliza" placeholder="Número de Poliza">
+    <input type="text" id="telefono" placeholder="Teléfono">
+    <input type="text" id="correo" placeholder="Correo">
+    <input type="text" id="direccion" placeholder="Dirección">
+    <input type="text" id="agente" placeholder="Agente">
+    <input type="text" id="telAgente" placeholder="Telefono Agente">
+    <input type="text" id="correoAgente" placeholder="Correo Agente">
+    <input type="text" id="term" placeholder="Terminación">
+    <input type="text" id="mmFrom" placeholder="Desde Mes">
+    <input type="text" id="ddFrom" placeholder="Desde Día">
+    <input type="text" id="yrFrom" placeholder="Desde año">
+    <input type="text" id="mmTo" placeholder="Hasta Mes">
+    <input type="text" id="ddTo" placeholder="Hasta Día">
+    <input type="text" id="yrTo" placeholder="Hasta año">
+    <input type="text" id="hora" placeholder="Hora">
+    <input type="text" id="am/pm" placeholder="AM / PM">
+    <input type="text" id="añoVeh" placeholder="Año de Vehiculo">
+    <input type="text" id="marcaVeh" placeholder="Marca de Vehiculo">
+    <input type="text" id="modVeh" placeholder="modelo de Vehiculo">
+    <input type="text" id="vin" placeholder="VIN">
+    <input type="text" id="placaEstado" placeholder="Estado de Placas">
+    <input type="text" id="towed" placeholder="Towed">
+    <input type="text" id="premium" placeholder="Premium">
+    <input type="text" id="roadAssist" placeholder="Road Assist">
+    <input type="text" id="policyFee" placeholder="Policy Fee">
+    <input type="text" id="assistPlus" placeholder="Assist Plus">
+    <input type="text" id="misc" placeholder="Misc">
+    <input type="text" id="total" placeholder="Total">
+    <input type="text" id="applicant" placeholder="Aplicante">
+    <input type="text" id="driver2" placeholder="Conductor 2">
+    <input type="text" id="elder/Underage" placeholder="Persona Mayor/Menor">
+    <input type="text" id="applicantBirth" placeholder="Edad de Aplicante">
+    <input type="text" id="driver2Birth" placeholder="Edad Conductor 2">
+    <input type="text" id="eld/UndBirth" placeholder="Edad Persona Mayor/Menor">
+    <input type="text" id="applicantLicense" placeholder="Licencia Aplicante">
+    <input type="text" id="driver2License" placeholder="Licencia Conductor 2">
+    <input type="text" id="eld/UndLicense" placeholder="Licencia Persona Mayor/Menor">
+    <input type="text" id="initial" placeholder="Inicial">
+    <button id="rellenarPDF">Rellenar PDF</button>
+    <script>
+        // Función para rellenar campos de formulario en un PDF
+        async function rellenarPDF() {
+            const parametrosPoliza = await fetch('./parametros.json').then((res) => res.json())
+            //console.log(parametrosPoliza)
+            //const parametrosPoliza = JSON.parse(parametrosPoliza)
+            // Cargar el PDF existente (reemplaza 'ruta-al-pdf.pdf' con la URL o la ruta local de tu PDF)
+            const existingPdfBytes = await fetch('test/pdf-formulario.pdf').then((res) => res.arrayBuffer());
 
-<script>
-    
-    const paramData = {
-        input: "test/Polizas_Turista 16jun_Mesa de trabajo 1.pdf",
-        image: "image/Commons_QR_code.png",
-        output: "test/output.pdf",
-        fillData: {
-            numPoliza: "1",
-            nombreAsegurado: "Ricardo Hernandez",
-            telAsegurado: "8116610129",
-            correoAsegurado: "rhernandez@nationalunity.com.mx",
-            direccionAsegurado: "Miguel Angel #6420 Portal de Cumbres",
-            agente: "Agente",
-            telAgente: "Un Numero",
-            correoAgente: "Correo",
-            term: "T",
-            mMFrom: "08",
-            dDFrom: "23",
-            yRFrom: "23",
-            mMTo: "10",
-            dDTo: "23",
-            yRTo: "23",
-            hR: "05",
-            aMPM: "PM",
-            añoVeh: "2012",
-            marcaVeh: "Chevrolet",
-            modeloVeh: "Sonic",
-            vIN: "1518165100",
-            placaEstado: "TEK-412-A",
-            towed: "No",
-            premium: "Si",
-            roadAssist: "Si",
-            policyFee: "Si",
-            assistPlus: "Si",
-            misc: "N/A",
-            total: "$4,815,198",
-            applicant: "Ricardo Hernandez Rincon",
-            driver2: "N/A",
-            elderUnderage: "N/A",
-            applicantBirth: "23/10/01",
-            driver2Birth: "N/A",
-            eldUndBirth: "N/A",
-            applicantLicense: "Licencia",
-            driver2License: "N/A",
-            eldUndLicense: "N/A",
-            initial: "R"
-        },
-    }
+            // Crear un documento PDF desde el PDF existente
+            const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+            const form = pdfDoc.getForm();
 
-    document.querySelector('button')
-        .addEventListener('click', (e) => {      
-            fetch('/pdf', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+            // Obtener los valores de los campos de formulario desde los elementos HTML
+            /*const nombreAsegurado = document.getElementById('nombre').value;
+            const numPoliza = document.getElementById('nPoliza').value;
+            const telAsegurado = document.getElementById('telefono').value;
+            const correoAsegurado = document.getElementById('correo').value;
+            const direccionAsegurado = document.getElementById('direccion').value;
+            const agente = document.getElementById('agente').value;
+            const telAgente = document.getElementById('telAgente').value;
+            const correoAgente = document.getElementById('correoAgente').value;
+            const term= document.getElementById('term').value;
+            const mMFrom= document.getElementById('mmFrom').value;
+            const dDFrom = document.getElementById('ddFrom').value;
+            const yRFrom = document.getElementById('yrFrom').value;
+            const mMTo = document.getElementById('mmTo').value;
+            const dDTo= document.getElementById('ddTo').value;
+            const yRTo = document.getElementById('yrTo').value;
+            const hR = document.getElementById('hora').value;
+            const aMPM = document.getElementById('am/pm').value;
+            const añoVeh = document.getElementById('añoVeh').value;
+            const marcaVeh = document.getElementById('marcaVeh').value;
+            const modeloVeh = document.getElementById('modVeh').value;
+            const vIN = document.getElementById('vin').value;
+            const placaEstado = document.getElementById('placaEstado').value;
+            const towed = document.getElementById('towed').value;
+            const premium = document.getElementById('premium').value;
+            const roadAssist = document.getElementById('roadAssist').value;
+            const policyFee = document.getElementById('policyFee').value;
+            const assistPlus = document.getElementById('assistPlus').value;
+            const misc = document.getElementById('misc').value;
+            const total = document.getElementById('total').value;
+            const applicant = document.getElementById('applicant').value;
+            const driver2 = document.getElementById('driver2').value;
+            const elderUnderage = document.getElementById('elder/Underage').value;
+            const applicantBirth = document.getElementById('applicantBirth').value;
+            const driver2Birth = document.getElementById('driver2Birth').value;
+            const eldUndBirth = document.getElementById('eld/UndBirth').value;
+            const applicantLicense = document.getElementById('applicantLicense').value;
+            const driver2License = document.getElementById('driver2License').value;
+            const eldUndLicense = document.getElementById('eld/UndLicense').value;
+            const initial = document.getElementById('initial').value;*/
+
+            // Rellenar los campos de formulario en el PDF
+            form.getTextField('NombreAsegurado').setText(parametrosPoliza.nombreAsegurado);
+            form.getTextField('NumPoliza').setText(parametrosPoliza.numPoliza);
+            form.getTextField('TelAsegurado').setText(parametrosPoliza.telAsegurado);
+            form.getTextField('CorreoAsegurado').setText(parametrosPoliza.correoAsegurado);
+            form.getTextField('DireccionAsegurado').setText(parametrosPoliza.direccionAsegurado)
+            form.getTextField('Agente').setText(parametrosPoliza.agente)
+            form.getTextField('TelAgente').setText(parametrosPoliza.telAgente)
+            form.getTextField('CorreoAgente').setText(parametrosPoliza.correoAgente)
+            form.getTextField('Term').setText(parametrosPoliza.term)
+            form.getTextField('MMFrom').setText(parametrosPoliza.mMFrom)
+            form.getTextField('DDFrom').setText(parametrosPoliza.dDFrom)
+            form.getTextField('YRFrom').setText(parametrosPoliza.yRFrom)
+            form.getTextField('MMTo').setText(parametrosPoliza.mMTo)
+            form.getTextField('DDTo').setText(parametrosPoliza.dDTo)
+            form.getTextField('YRTo').setText(parametrosPoliza.yRTo)
+            form.getTextField('HR').setText(parametrosPoliza.hR)
+            form.getTextField('AM/PM').setText(parametrosPoliza.aMPM)
+            form.getTextField('AñoVeh').setText(parametrosPoliza.añoVeh)
+            form.getTextField('MarcaVeh').setText(parametrosPoliza.marcaVeh)
+            form.getTextField('ModeloVeh').setText(parametrosPoliza.modeloVeh)
+            form.getTextField('VIN').setText(parametrosPoliza.vIN)
+            form.getTextField('PlacaEstado').setText(parametrosPoliza.placaEstado)
+            form.getTextField('Towed').setText(parametrosPoliza.towed)
+            form.getTextField('Premium').setText(parametrosPoliza.premium)
+            form.getTextField('RoadAssist').setText(parametrosPoliza.roadAssist)
+            form.getTextField('PolicyFee').setText(parametrosPoliza.policyFee)
+            form.getTextField('AssistPlus').setText(parametrosPoliza.assistPlus)
+            form.getTextField('Misc').setText(parametrosPoliza.misc)
+            form.getTextField('Total').setText(parametrosPoliza.total)
+            form.getTextField('Applicant').setText(parametrosPoliza.applicant)
+            form.getTextField('Driver2').setText(parametrosPoliza.driver2)
+            form.getTextField('Elder/Underage').setText(parametrosPoliza.elderUnderage)
+            form.getTextField('ApplicantBirth').setText(parametrosPoliza.applicantBirth)
+            form.getTextField('Driver2Birth').setText(parametrosPoliza.driver2Birth)
+            form.getTextField('Eld/UndBirth').setText(parametrosPoliza.eldUndBirth)
+            form.getTextField('ApplicantLicense').setText(parametrosPoliza.applicantLicense)
+            form.getTextField('Driver2License').setText(parametrosPoliza.driver2License)
+            form.getTextField('Eld/UndLicense').setText(parametrosPoliza.eldUndLicense)
+            form.getTextField('Initial').setText(parametrosPoliza.initial)
+            form.flatten()
+
+            // Generar un nuevo PDF con los campos de formulario llenados
+            const pdfBytes = await pdfDoc.save();
+
+            const pickerOpts = {
+                types: [
+                {
+                    description: "Documento PDF (.pdf)",
+                    accept: {
+                    "application/*": [".pdf"],
+                    },
                 },
-                body: JSON.stringify(paramData)
-            })
-                .then((res) => {
-                    return res.blob();
-                })
-                .then((blob) => {
-                    const blobData = URL.createObjectURL(blob);
-                    window.open(blobData, '_blank');
-                })
-        });
-</script>
+                ],
+                excludeAcceptAllOption: true,
+                multiple: false,
+            };
+
+            const fileHandle = await window.showSaveFilePicker(pickerOpts);
+            const fileStream = await fileHandle.createWritable();
+            
+
+            // Descargar el PDF resultante
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            await fileStream.write(blob);
+            await fileStream.close();
+            
+        }
+
+        // Asociar la función al botón
+        document.getElementById('rellenarPDF').addEventListener('click', rellenarPDF);
+    </script>
+</body>
+</html>
