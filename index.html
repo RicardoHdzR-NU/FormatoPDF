@@ -45,131 +45,135 @@
     <input type="text" id="eld/UndLicense" placeholder="Licencia Persona Mayor/Menor">
     <input type="text" id="initial" placeholder="Inicial">
     <button id="rellenarPDF">Rellenar PDF</button>
+    <br>
     <script>
         // Función para rellenar campos de formulario en un PDF
-        async function rellenarPDF() {
-            const parametrosPoliza = await fetch('./parametros.json').then((res) => res.json())
-            //console.log(parametrosPoliza)
-            //const parametrosPoliza = JSON.parse(parametrosPoliza)
-            // Cargar el PDF existente (reemplaza 'ruta-al-pdf.pdf' con la URL o la ruta local de tu PDF)
-            const existingPdfBytes = await fetch('test/pdf-formulario.pdf').then((res) => res.arrayBuffer());
+        async function rellenarPDF(nombrePDF, datosPDF) {
+            if(nombrePDF == 'pdf-formulario'){
+                // Cargar el PDF existente (reemplaza 'ruta-al-pdf.pdf' con la URL o la ruta local de tu PDF)
+                const existingPdfBytes = await fetch(`test/${nombrePDF}.pdf`).then((res) => res.arrayBuffer());
+                //console.log('bytes obtenidos: ' , existingPdfBytes)
 
-            // Crear un documento PDF desde el PDF existente
-            const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
-            const form = pdfDoc.getForm();
+                // Crear un documento PDF desde el PDF existente
+                const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+                const form = pdfDoc.getForm();
+                //console.log('cargamos el formulario')
 
-            // Obtener los valores de los campos de formulario desde los elementos HTML
-            /*const nombreAsegurado = document.getElementById('nombre').value;
-            const numPoliza = document.getElementById('nPoliza').value;
-            const telAsegurado = document.getElementById('telefono').value;
-            const correoAsegurado = document.getElementById('correo').value;
-            const direccionAsegurado = document.getElementById('direccion').value;
-            const agente = document.getElementById('agente').value;
-            const telAgente = document.getElementById('telAgente').value;
-            const correoAgente = document.getElementById('correoAgente').value;
-            const term= document.getElementById('term').value;
-            const mMFrom= document.getElementById('mmFrom').value;
-            const dDFrom = document.getElementById('ddFrom').value;
-            const yRFrom = document.getElementById('yrFrom').value;
-            const mMTo = document.getElementById('mmTo').value;
-            const dDTo= document.getElementById('ddTo').value;
-            const yRTo = document.getElementById('yrTo').value;
-            const hR = document.getElementById('hora').value;
-            const aMPM = document.getElementById('am/pm').value;
-            const añoVeh = document.getElementById('añoVeh').value;
-            const marcaVeh = document.getElementById('marcaVeh').value;
-            const modeloVeh = document.getElementById('modVeh').value;
-            const vIN = document.getElementById('vin').value;
-            const placaEstado = document.getElementById('placaEstado').value;
-            const towed = document.getElementById('towed').value;
-            const premium = document.getElementById('premium').value;
-            const roadAssist = document.getElementById('roadAssist').value;
-            const policyFee = document.getElementById('policyFee').value;
-            const assistPlus = document.getElementById('assistPlus').value;
-            const misc = document.getElementById('misc').value;
-            const total = document.getElementById('total').value;
-            const applicant = document.getElementById('applicant').value;
-            const driver2 = document.getElementById('driver2').value;
-            const elderUnderage = document.getElementById('elder/Underage').value;
-            const applicantBirth = document.getElementById('applicantBirth').value;
-            const driver2Birth = document.getElementById('driver2Birth').value;
-            const eldUndBirth = document.getElementById('eld/UndBirth').value;
-            const applicantLicense = document.getElementById('applicantLicense').value;
-            const driver2License = document.getElementById('driver2License').value;
-            const eldUndLicense = document.getElementById('eld/UndLicense').value;
-            const initial = document.getElementById('initial').value;*/
+                // Rellenar los campos de formulario en el PDF
+                form.getTextField('NombreAsegurado').setText(datosPDF.nombreAsegurado);
+                form.getTextField('NumPoliza').setText(datosPDF.numPoliza);
+                form.getTextField('TelAsegurado').setText(datosPDF.telAsegurado);
+                form.getTextField('CorreoAsegurado').setText(datosPDF.correoAsegurado);
+                form.getTextField('DireccionAsegurado').setText(datosPDF.direccionAsegurado)
+                form.getTextField('Agente').setText(datosPDF.agente)
+                form.getTextField('TelAgente').setText(datosPDF.telAgente)
+                form.getTextField('CorreoAgente').setText(datosPDF.correoAgente)
+                form.getTextField('Term').setText(datosPDF.term)
+                form.getTextField('MMFrom').setText(datosPDF.mMFrom)
+                form.getTextField('DDFrom').setText(datosPDF.dDFrom)
+                form.getTextField('YRFrom').setText(datosPDF.yRFrom)
+                form.getTextField('MMTo').setText(datosPDF.mMTo)
+                form.getTextField('DDTo').setText(datosPDF.dDTo)
+                form.getTextField('YRTo').setText(datosPDF.yRTo)
+                form.getTextField('HR').setText(datosPDF.hR)
+                form.getTextField('AM/PM').setText(datosPDF.aMPM)
+                form.getTextField('AñoVeh').setText(datosPDF.añoVeh)
+                form.getTextField('MarcaVeh').setText(datosPDF.marcaVeh)
+                form.getTextField('ModeloVeh').setText(datosPDF.modeloVeh)
+                form.getTextField('VIN').setText(datosPDF.vIN)
+                form.getTextField('PlacaEstado').setText(datosPDF.placaEstado)
+                form.getTextField('Towed').setText(datosPDF.towed)
+                form.getTextField('Premium').setText(datosPDF.premium)
+                form.getTextField('RoadAssist').setText(datosPDF.roadAssist)
+                form.getTextField('PolicyFee').setText(datosPDF.policyFee)
+                form.getTextField('AssistPlus').setText(datosPDF.assistPlus)
+                form.getTextField('Misc').setText(datosPDF.misc)
+                form.getTextField('Total').setText(datosPDF.total)
+                form.getTextField('Applicant').setText(datosPDF.applicant)
+                form.getTextField('Driver2').setText(datosPDF.driver2)
+                form.getTextField('Elder/Underage').setText(datosPDF.elderUnderage)
+                form.getTextField('ApplicantBirth').setText(datosPDF.applicantBirth)
+                form.getTextField('Driver2Birth').setText(datosPDF.driver2Birth)
+                form.getTextField('Eld/UndBirth').setText(datosPDF.eldUndBirth)
+                form.getTextField('ApplicantLicense').setText(datosPDF.applicantLicense)
+                form.getTextField('Driver2License').setText(datosPDF.driver2License)
+                form.getTextField('Eld/UndLicense').setText(datosPDF.eldUndLicense)
+                form.getTextField('Initial').setText(datosPDF.initial)
+                form.flatten()
 
-            // Rellenar los campos de formulario en el PDF
-            form.getTextField('NombreAsegurado').setText(parametrosPoliza.nombreAsegurado);
-            form.getTextField('NumPoliza').setText(parametrosPoliza.numPoliza);
-            form.getTextField('TelAsegurado').setText(parametrosPoliza.telAsegurado);
-            form.getTextField('CorreoAsegurado').setText(parametrosPoliza.correoAsegurado);
-            form.getTextField('DireccionAsegurado').setText(parametrosPoliza.direccionAsegurado)
-            form.getTextField('Agente').setText(parametrosPoliza.agente)
-            form.getTextField('TelAgente').setText(parametrosPoliza.telAgente)
-            form.getTextField('CorreoAgente').setText(parametrosPoliza.correoAgente)
-            form.getTextField('Term').setText(parametrosPoliza.term)
-            form.getTextField('MMFrom').setText(parametrosPoliza.mMFrom)
-            form.getTextField('DDFrom').setText(parametrosPoliza.dDFrom)
-            form.getTextField('YRFrom').setText(parametrosPoliza.yRFrom)
-            form.getTextField('MMTo').setText(parametrosPoliza.mMTo)
-            form.getTextField('DDTo').setText(parametrosPoliza.dDTo)
-            form.getTextField('YRTo').setText(parametrosPoliza.yRTo)
-            form.getTextField('HR').setText(parametrosPoliza.hR)
-            form.getTextField('AM/PM').setText(parametrosPoliza.aMPM)
-            form.getTextField('AñoVeh').setText(parametrosPoliza.añoVeh)
-            form.getTextField('MarcaVeh').setText(parametrosPoliza.marcaVeh)
-            form.getTextField('ModeloVeh').setText(parametrosPoliza.modeloVeh)
-            form.getTextField('VIN').setText(parametrosPoliza.vIN)
-            form.getTextField('PlacaEstado').setText(parametrosPoliza.placaEstado)
-            form.getTextField('Towed').setText(parametrosPoliza.towed)
-            form.getTextField('Premium').setText(parametrosPoliza.premium)
-            form.getTextField('RoadAssist').setText(parametrosPoliza.roadAssist)
-            form.getTextField('PolicyFee').setText(parametrosPoliza.policyFee)
-            form.getTextField('AssistPlus').setText(parametrosPoliza.assistPlus)
-            form.getTextField('Misc').setText(parametrosPoliza.misc)
-            form.getTextField('Total').setText(parametrosPoliza.total)
-            form.getTextField('Applicant').setText(parametrosPoliza.applicant)
-            form.getTextField('Driver2').setText(parametrosPoliza.driver2)
-            form.getTextField('Elder/Underage').setText(parametrosPoliza.elderUnderage)
-            form.getTextField('ApplicantBirth').setText(parametrosPoliza.applicantBirth)
-            form.getTextField('Driver2Birth').setText(parametrosPoliza.driver2Birth)
-            form.getTextField('Eld/UndBirth').setText(parametrosPoliza.eldUndBirth)
-            form.getTextField('ApplicantLicense').setText(parametrosPoliza.applicantLicense)
-            form.getTextField('Driver2License').setText(parametrosPoliza.driver2License)
-            form.getTextField('Eld/UndLicense').setText(parametrosPoliza.eldUndLicense)
-            form.getTextField('Initial').setText(parametrosPoliza.initial)
-            form.flatten()
+                // Generar un nuevo PDF con los campos de formulario llenados
+                const pdfBytes = await pdfDoc.save();
+                
+                // Descargar el PDF resultante
+                var blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                var blobUrl = URL.createObjectURL(blob);
+                var link = document.createElement("a"); // Or maybe get it from the current document
+                const br = document.createElement("br");
+                link.href = blobUrl;
+                link.download = "polizaCarro.pdf";
+                link.innerHTML = "Descarga Poliza de Carro";
+                document.body.appendChild(link); // Or append it whereever you want*/
+                document.body.appendChild(br)
 
-            // Generar un nuevo PDF con los campos de formulario llenados
-            const pdfBytes = await pdfDoc.save();
+            }else if(nombrePDF == 'Motorcycle_2023-formulario'){
 
-            const pickerOpts = {
-                types: [
-                {
-                    description: "Documento PDF (.pdf)",
-                    accept: {
-                    "application/*": [".pdf"],
-                    },
-                },
-                ],
-                excludeAcceptAllOption: true,
-                multiple: false,
-            };
+                // Cargar el PDF existente (reemplaza 'ruta-al-pdf.pdf' con la URL o la ruta local de tu PDF)
+                const existingPdfBytes = await fetch(`test/${nombrePDF}.pdf`).then((res) => res.arrayBuffer());
+                //console.log('bytes obtenidos: ' , existingPdfBytes)
 
-            const fileHandle = await window.showSaveFilePicker(pickerOpts);
-            const fileStream = await fileHandle.createWritable();
-            
+                // Crear un documento PDF desde el PDF existente
+                const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+                const form = pdfDoc.getForm();
+                //console.log('cargamos el formulario')
 
-            // Descargar el PDF resultante
-            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-            await fileStream.write(blob);
-            await fileStream.close();
+                // Rellenar los campos de formulario en el PDF
+                form.getTextField('NombreAsegurado').setText(datosPDF.nombreAsegurado);
+                form.getTextField('NumPoliza').setText(datosPDF.numPoliza);
+                form.getTextField('TelAsegurado').setText(datosPDF.telAsegurado);
+                
+                form.flatten()
+
+                // Generar un nuevo PDF con los campos de formulario llenados
+                const pdfBytes = await pdfDoc.save();
+                
+                // Descargar el PDF resultante
+                var blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                var blobUrl = URL.createObjectURL(blob);
+                var link = document.createElement("a"); // Or maybe get it from the current document
+                const br = document.createElement("br");
+                link.href = blobUrl;
+                link.download = "polizaMoto.pdf";
+                link.innerHTML = "Descarga Poliza de Moto";
+                document.body.appendChild(link); // Or append it whereever you want*/
+                document.body.appendChild(br)
+            }
             
         }
 
+        const pdf1 = {
+            "numPoliza": "1",
+            "nombreAsegurado": "Ricardo Hernandez",
+            "telAsegurado": "8116610129",
+        }
+
+        const pdf2 = {
+            "numPoliza": "2",
+            "nombreAsegurado": "Ricardo Hernandez",
+            "telAsegurado": "8116610129",
+        }
+
+        const PDFs = [
+            ["pdf-formulario",pdf1],
+            ["Motorcycle_2023-formulario",pdf2]
+        ]
+
+        async function procesarPDF(){
+            for(let i = 0; i<=PDFs.length; i++){
+                await rellenarPDF(PDFs[i][0], PDFs[i][1]) 
+            }
+        }
         // Asociar la función al botón
-        document.getElementById('rellenarPDF').addEventListener('click', rellenarPDF);
+        document.getElementById('rellenarPDF').addEventListener('click', procesarPDF);
     </script>
 </body>
 </html>
