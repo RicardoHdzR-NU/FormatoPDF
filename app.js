@@ -20,13 +20,13 @@ const { PDFDocument } = require('pdf-lib');
 //const fs = require('fs');
 
 //Función para llenar el PDF
-async function fillPdfForm(input, image, fillData) {
+/*async function fillPdfForm(input, fillData) {
 	try {
         // Cargamos el PDF
         const pdfDoc = await PDFDocument.load(input)
         // Cargamos la imagen (elegimos la que sea necesaria segun si es jpg o png)
         //const qrImage = await pdfDoc.embedJpg(image)
-        const qrImage = await pdfDoc.embedPng(image)
+        //const qrImage = await pdfDoc.embedPng(image)
 
         //Obtenemos la información del formulario
         const form = pdfDoc.getForm()
@@ -112,7 +112,7 @@ async function fillPdfForm(input, image, fillData) {
         driver2LicenseField.setText(fillData.driver2License)
         eldUndLicenseField.setText(fillData.eldUndLicense)
         initialField.setText(fillData.initial)
-        qrImageField.setImage(qrImage)
+        //qrImageField.setImage(qrImage)
 
         form.flatten();
 
@@ -121,10 +121,11 @@ async function fillPdfForm(input, image, fillData) {
 	} catch (err) {
 		console.error('Error:', err);
 	}
-}
+}*/
 // Función para guardar el PDF
 async function saveFilledForm(pdfDoc, output) {
 	try {
+
 		const filledFormBytes = await pdfDoc.save();
 		fs.writeFileSync(output, filledFormBytes);
 		console.log('Filled form saved successfully!');
@@ -136,16 +137,189 @@ async function saveFilledForm(pdfDoc, output) {
 //Función principal
 async function pdf(parameterData) {
     // Convertimos en buffers al PDF e Imagen
-    const inputFile = fs.readFileSync(parameterData.input)
-    const inputImage = fs.readFileSync(parameterData.image)
-    //Llneamos el documento y lo guardamos
+    //const inputFile = fs.readFileSync(parameterData.input)
+    //const inputImage = fs.readFileSync(parameterData.image)
+    //Llenamos el documento y lo guardamos
+    
 	const pdfDoc = await fillPdfForm(inputFile, inputImage, parameterData.fillData);
 	await saveFilledForm(pdfDoc, parameterData.output);
 }
 
-/*app.post("/pdf", async (req, res) => {
+const pdf1 = {
+    "numPoliza": "1",
+    "nombreAsegurado": "Ricardo Hernandez",
+    "telAsegurado": "8116610129",
+}
+
+const pdf2 = {
+    "numPoliza": "2",
+    "nombreAsegurado": "Ricardo Hernandez",
+    "telAsegurado": "8116610129",
+}
+
+async function pdfForm(parameters){
+    if(parameters.prefijo == "AXW" && parameters.folio == "353579629"){
+    //if(nombrePDF == 'pdf-formulario'){
+        console.log('haciendo poliza de carro')
+        const nombreDoc = 'pdf-formulario';
+
+        //los datos a rellenar se obtendrían de la consulta
+        const datosPDF = pdf1;
+        // Cargar el PDF existente (reemplaza 'ruta-al-pdf.pdf' con la URL o la ruta local de tu PDF)
+        //const existingPdfBytes = await fetch(`test/${nombreDoc}.pdf`).then((res) => res.arrayBuffer());
+        //console.log('bytes obtenidos: ' , existingPdfBytes)
+        const existingPdfBytes = fs.readFileSync(`test/${nombreDoc}.pdf`)
+
+        // Crear un documento PDF desde el PDF existente
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
+        const form = pdfDoc.getForm();
+        //console.log('cargamos el formulario')
+
+        // Rellenar los campos de formulario en el PDF
+        form.getTextField('NombreAsegurado').setText(datosPDF.nombreAsegurado);
+        form.getTextField('NumPoliza').setText(datosPDF.numPoliza);
+        form.getTextField('TelAsegurado').setText(datosPDF.telAsegurado);
+        form.getTextField('CorreoAsegurado').setText(datosPDF.correoAsegurado);
+        form.getTextField('DireccionAsegurado').setText(datosPDF.direccionAsegurado)
+        form.getTextField('Agente').setText(datosPDF.agente)
+        form.getTextField('TelAgente').setText(datosPDF.telAgente)
+        form.getTextField('CorreoAgente').setText(datosPDF.correoAgente)
+        form.getTextField('Term').setText(datosPDF.term)
+        form.getTextField('MMFrom').setText(datosPDF.mMFrom)
+        form.getTextField('DDFrom').setText(datosPDF.dDFrom)
+        form.getTextField('YRFrom').setText(datosPDF.yRFrom)
+        form.getTextField('MMTo').setText(datosPDF.mMTo)
+        form.getTextField('DDTo').setText(datosPDF.dDTo)
+        form.getTextField('YRTo').setText(datosPDF.yRTo)
+        form.getTextField('HR').setText(datosPDF.hR)
+        form.getTextField('AM/PM').setText(datosPDF.aMPM)
+        form.getTextField('AñoVeh').setText(datosPDF.añoVeh)
+        form.getTextField('MarcaVeh').setText(datosPDF.marcaVeh)
+        form.getTextField('ModeloVeh').setText(datosPDF.modeloVeh)
+        form.getTextField('VIN').setText(datosPDF.vIN)
+        form.getTextField('PlacaEstado').setText(datosPDF.placaEstado)
+        form.getTextField('Towed').setText(datosPDF.towed)
+        form.getTextField('Premium').setText(datosPDF.premium)
+        form.getTextField('RoadAssist').setText(datosPDF.roadAssist)
+        form.getTextField('PolicyFee').setText(datosPDF.policyFee)
+        form.getTextField('AssistPlus').setText(datosPDF.assistPlus)
+        form.getTextField('Misc').setText(datosPDF.misc)
+        form.getTextField('Total').setText(datosPDF.total)
+        form.getTextField('Applicant').setText(datosPDF.applicant)
+        form.getTextField('Driver2').setText(datosPDF.driver2)
+        form.getTextField('Elder/Underage').setText(datosPDF.elderUnderage)
+        form.getTextField('ApplicantBirth').setText(datosPDF.applicantBirth)
+        form.getTextField('Driver2Birth').setText(datosPDF.driver2Birth)
+        form.getTextField('Eld/UndBirth').setText(datosPDF.eldUndBirth)
+        form.getTextField('ApplicantLicense').setText(datosPDF.applicantLicense)
+        form.getTextField('Driver2License').setText(datosPDF.driver2License)
+        form.getTextField('Eld/UndLicense').setText(datosPDF.eldUndLicense)
+        form.getTextField('Initial').setText(datosPDF.initial)
+        form.flatten()
+
+        // Generar un nuevo PDF con los campos de formulario llenados
+        //const pdfBytes = await pdfDoc.save();
+        return pdfDoc;
+
+        /*const pickerOpts = {
+            types: [
+            {
+                description: "PDF Document (.pdf)",
+                accept: {
+                "application/*": [".pdf"],
+                },
+            },
+            ],
+            excludeAcceptAllOption: true,
+            multiple: false,
+        };*/
+
+        /*const fileHandle = await window.showSaveFilePicker(pickerOpts);
+        const fileStream = await fileHandle.createWritable();*/
+        
+        // Descargar el PDF resultante
+        //var blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+        /*await fileStream.write(blob);
+        await fileStream.close();*/
+
+        /*var blobUrl = URL.createObjectURL(blob);
+        var link = document.createElement("a"); // Or maybe get it from the current document
+        const br = document.createElement("br");
+        link.href = blobUrl;
+        link.download = "polizaCarro.pdf";
+        link.innerHTML = "Descarga Poliza de Carro";
+        document.body.appendChild(link); // Or append it whereever you want
+        document.body.appendChild(br)*/
+
+    }
+    else if(parameters.prefijo == "AXW" && parameters.folio == "353579570"){
+    //else if(nombrePDF == 'Motorcycle_2023-formulario'){
+        console.log('haciendo poliza de moto')
+        const nombreDoc = 'Motorcycle_2023-formulario';
+
+        //los datos a rellenar se obtendrían de la consulta
+        const datosPDF = pdf2;
+
+        // Cargar el PDF existente (reemplaza 'ruta-al-pdf.pdf' con la URL o la ruta local de tu PDF)
+        //const existingPdfBytes = await fetch(`test/${nombreDoc}.pdf`).then((res) => res.arrayBuffer());
+        //console.log('bytes obtenidos: ' , existingPdfBytes)
+        const existingPdfBytes = fs.readFileSync(`test/${nombreDoc}.pdf`)
+
+        // Crear un documento PDF desde el PDF existente
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
+        const form = pdfDoc.getForm();
+        //console.log('cargamos el formulario')
+
+        // Rellenar los campos de formulario en el PDF
+        form.getTextField('NombreAsegurado').setText(datosPDF.nombreAsegurado);
+        form.getTextField('NumPoliza').setText(datosPDF.numPoliza);
+        form.getTextField('TelAsegurado').setText(datosPDF.telAsegurado);
+        
+        form.flatten()
+
+        return pdfDoc;
+
+        // Generar un nuevo PDF con los campos de formulario llenados
+        //const pdfBytes = await pdfDoc.save();
+
+        /*const pickerOpts = {
+            types: [
+            {
+                description: "PDF Document (.pdf)",
+                accept: {
+                "application/*": [".pdf"],
+                },
+            },
+            ],
+            excludeAcceptAllOption: true,
+            multiple: false,
+        };*/
+
+        /*const fileHandle = await window.showSaveFilePicker(pickerOpts);
+        const fileStream = await fileHandle.createWritable();*/
+        
+        // Descargar el PDF resultante
+        //var blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+        /*await fileStream.write(blob);
+        await fileStream.close();*/
+
+        /*var blobUrl = URL.createObjectURL(blob);
+        var link = document.createElement("a"); // Or maybe get it from the current document
+        const br = document.createElement("br");
+        link.href = blobUrl;
+        link.download = "polizaMoto.pdf";
+        link.innerHTML = "Descarga Poliza de Moto";
+        document.body.appendChild(link); // Or append it whereever you want
+        document.body.appendChild(br)*/
+    }
+}
+
+app.post("/pdf", async (req, res) => {
     //console.log(req)
     const parameterData = req.body
+    var output;
     //console.log(parameterData)
     //leemos el archivo JSON de parametros
     //const jsonString = fs.readFileSync('./parameters.json');
@@ -153,28 +327,35 @@ async function pdf(parameterData) {
     //parseamos el JSON
     //const parameterData = JSON.parse(jsonString);
     //mandamos llamar a la función para llenar el PDF
-    await pdf(parameterData);
+    if(parameterData.folio == "353579629"){
+        output = "test/polizaCarro.pdf"
+    }else{
+        output = "test/polizaMoto.pdf"
+    }
+    const pdfDoc = await pdfForm(parameterData);
+    await saveFilledForm(pdfDoc, output);
     //buscamos el archivo de salida y lo abrimos en el browser
-    var data = fs.readFileSync('./test/output.pdf');
+    var data = fs.readFileSync(`./${output}`);
     res.contentType('application/pdf');
     res.send(data);
+    
 
     //esta es otra forma de enviar el archivo, funciona casi igual
     
-    var data = fs.createReadStream('./test/output.pdf');
+    /*var data = fs.createReadStream('./test/output.pdf');
     var stat = fs.statSync('./test/output.pdf');
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=output.pdf');
-    data.pipe(res); 
+    data.pipe(res); */
     
-})*/
+})
 
 /*app.get("/", (req, res) => {
     res.sendFile(__dirname + '/index.html');
 })*/
 
-app.get("/", async (req, res) => {
+/*app.get("/", async (req, res) => {
     //console.log(req)
     //const parameterData = req.body
     //console.log(parameterData)
@@ -191,12 +372,12 @@ app.get("/", async (req, res) => {
     res.send(data);
 
     //esta es otra forma de enviar el archivo, funciona casi igual
-    /*
+    
     var data = fs.createReadStream('./test/output.pdf');
     var stat = fs.statSync('./test/output.pdf');
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=output.pdf');
     data.pipe(res); 
-    */
-})
+    
+})*/
