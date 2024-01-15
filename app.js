@@ -135,7 +135,7 @@ async function saveFilledForm(pdfDoc, output) {
 }
 
 //Función principal
-async function pdf(parameterData) {
+/*async function pdf(parameterData) {
     // Convertimos en buffers al PDF e Imagen
     //const inputFile = fs.readFileSync(parameterData.input)
     //const inputImage = fs.readFileSync(parameterData.image)
@@ -143,7 +143,7 @@ async function pdf(parameterData) {
     
 	const pdfDoc = await fillPdfForm(inputFile, inputImage, parameterData.fillData);
 	await saveFilledForm(pdfDoc, parameterData.output);
-}
+}*/
 
 const pdf1 = {
     "numPoliza": "1",

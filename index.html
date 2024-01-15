@@ -48,10 +48,21 @@
     <br>
     <script>
         // Función para rellenar campos de formulario en un PDF
-        async function rellenarPDF(nombrePDF, datosPDF) {
-            if(nombrePDF == 'pdf-formulario'){
+        async function rellenarPDF(nombrePDF) {
+            //console.log(nombrePDF)
+            /*
+                aquí se haría la consulta con el prefijo y folio
+            */
+            //aquí se deciciría que tipo de poliza llenar con el tipo de poliza que se obtuvo de la consulta
+            //if(poliza.tipo == "Auto Turista") por ejemplo
+            if(nombrePDF.prefijo == "AXW" && nombrePDF.folio == "353579629"){
+            //if(nombrePDF == 'pdf-formulario'){
+                const nombreDoc = 'pdf-formulario';
+
+                //los datos a rellenar se obtendrían de la consulta
+                const datosPDF = pdf1;
                 // Cargar el PDF existente (reemplaza 'ruta-al-pdf.pdf' con la URL o la ruta local de tu PDF)
-                const existingPdfBytes = await fetch(`test/${nombrePDF}.pdf`).then((res) => res.arrayBuffer());
+                const existingPdfBytes = await fetch(`test/${nombreDoc}.pdf`).then((res) => res.arrayBuffer());
                 //console.log('bytes obtenidos: ' , existingPdfBytes)
 
                 // Crear un documento PDF desde el PDF existente
@@ -103,22 +114,48 @@
 
                 // Generar un nuevo PDF con los campos de formulario llenados
                 const pdfBytes = await pdfDoc.save();
+
+                const pickerOpts = {
+                    types: [
+                    {
+                        description: "PDF Document (.pdf)",
+                        accept: {
+                        "application/*": [".pdf"],
+                        },
+                    },
+                    ],
+                    excludeAcceptAllOption: true,
+                    multiple: false,
+                };
+
+                /*const fileHandle = await window.showSaveFilePicker(pickerOpts);
+                const fileStream = await fileHandle.createWritable();*/
                 
                 // Descargar el PDF resultante
                 var blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+                /*await fileStream.write(blob);
+                await fileStream.close();*/
+
                 var blobUrl = URL.createObjectURL(blob);
                 var link = document.createElement("a"); // Or maybe get it from the current document
                 const br = document.createElement("br");
                 link.href = blobUrl;
                 link.download = "polizaCarro.pdf";
                 link.innerHTML = "Descarga Poliza de Carro";
-                document.body.appendChild(link); // Or append it whereever you want*/
+                document.body.appendChild(link); // Or append it whereever you want
                 document.body.appendChild(br)
 
-            }else if(nombrePDF == 'Motorcycle_2023-formulario'){
+            }
+            else if(nombrePDF.prefijo == "AXW" && nombrePDF.folio == "353579570"){
+            //else if(nombrePDF == 'Motorcycle_2023-formulario'){
+                const nombreDoc = 'Motorcycle_2023-formulario';
+
+                //los datos a rellenar se obtendrían de la consulta
+                const datosPDF = pdf2;
 
                 // Cargar el PDF existente (reemplaza 'ruta-al-pdf.pdf' con la URL o la ruta local de tu PDF)
-                const existingPdfBytes = await fetch(`test/${nombrePDF}.pdf`).then((res) => res.arrayBuffer());
+                const existingPdfBytes = await fetch(`test/${nombreDoc}.pdf`).then((res) => res.arrayBuffer());
                 //console.log('bytes obtenidos: ' , existingPdfBytes)
 
                 // Crear un documento PDF desde el PDF existente
@@ -135,16 +172,36 @@
 
                 // Generar un nuevo PDF con los campos de formulario llenados
                 const pdfBytes = await pdfDoc.save();
+
+                const pickerOpts = {
+                    types: [
+                    {
+                        description: "PDF Document (.pdf)",
+                        accept: {
+                        "application/*": [".pdf"],
+                        },
+                    },
+                    ],
+                    excludeAcceptAllOption: true,
+                    multiple: false,
+                };
+
+                /*const fileHandle = await window.showSaveFilePicker(pickerOpts);
+                const fileStream = await fileHandle.createWritable();*/
                 
                 // Descargar el PDF resultante
                 var blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+                /*await fileStream.write(blob);
+                await fileStream.close();*/
+
                 var blobUrl = URL.createObjectURL(blob);
                 var link = document.createElement("a"); // Or maybe get it from the current document
                 const br = document.createElement("br");
                 link.href = blobUrl;
                 link.download = "polizaMoto.pdf";
                 link.innerHTML = "Descarga Poliza de Moto";
-                document.body.appendChild(link); // Or append it whereever you want*/
+                document.body.appendChild(link); // Or append it whereever you want
                 document.body.appendChild(br)
             }
             
@@ -162,14 +219,24 @@
             "telAsegurado": "8116610129",
         }
 
+        const consulta1 = {
+            "prefijo": "AXW",
+            "folio": "353579629"
+        }
+
+        const consulta2 = {
+            "prefijo": "AXW",
+            "folio": "353579570"
+        }
+
         const PDFs = [
-            ["pdf-formulario",pdf1],
-            ["Motorcycle_2023-formulario",pdf2]
+            consulta1,
+            consulta2
         ]
 
         async function procesarPDF(){
             for(let i = 0; i<=PDFs.length; i++){
-                await rellenarPDF(PDFs[i][0], PDFs[i][1]) 
+                await rellenarPDF(PDFs[i]) 
             }
         }
         // Asociar la función al botón
